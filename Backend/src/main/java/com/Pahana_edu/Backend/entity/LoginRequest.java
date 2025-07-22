@@ -1,5 +1,7 @@
 package com.Pahana_edu.Backend.entity;
 
+import lombok.Data;
+
 
 public class LoginRequest {
     private String username;
