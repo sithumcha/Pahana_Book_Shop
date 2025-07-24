@@ -9,6 +9,11 @@ import ContactUs from './Components/Contactus';
 import S from './Pages/S';
 import AdminRegister from './Admin/AdminRegister';
 import AdminLogin from './Admin/AdminLogin'; // Assuming you have an AdminLogin component
+import AddBook from './Admin/AddBook'; 
+import ManageBook from './Admin/ManageBook'; // Assuming you have an AddBook component
+import UserManagement from './Admin/UserManagement'; // Assuming you have an EditBook component
+import Shop from './Pages/Shop'; // Assuming you have a Books component
+import BookDetails from './Pages/BookDetails'; // Assuming you have a BookDetails component
 
 
  function App() {
@@ -23,7 +28,11 @@ import AdminLogin from './Admin/AdminLogin'; // Assuming you have an AdminLogin 
         <Route path="/s" element={<S />} />
         <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/admin/login" element={<AdminLogin />} /> {/* Admin Login Route */}
-
+        <Route path="/admin/addbook" element={<AddBook />} /> {/* Admin Add Book Route */}
+        <Route path="/admin/managebook" element={<ManageBook />} /> {/* Admin Manage Book Route */}
+        <Route path="/admin/usermanagement" element={<UserManagement />} /> {/* Admin User Management Route */}
+        <Route path="/shop" element={<Shop />} /> {/* Shop Route */}
+        <Route path="/bookdetails/:id" element={<BookDetails />} /> {/* Book Details Route */}
         
       </Routes>
     </Router>
