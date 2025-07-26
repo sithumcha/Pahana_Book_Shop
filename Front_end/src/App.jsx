@@ -14,6 +14,11 @@ import ManageBook from './Admin/ManageBook'; // Assuming you have an AddBook com
 import UserManagement from './Admin/UserManagement'; // Assuming you have an EditBook component
 import Shop from './Pages/Shop'; // Assuming you have a Books component
 import BookDetails from './Pages/BookDetails'; // Assuming you have a BookDetails component
+import Cart from './Pages/Cart'; // Assuming you have a Cart component
+import Checkout from './Pages/Checkout';
+import Addcard from './Pages/Addcard'; // Assuming you have an Addcard component
+import  Profile from './Pages/Profile'; // Assuming you have a Profile component
+
 
 
  function App() {
@@ -33,6 +38,11 @@ import BookDetails from './Pages/BookDetails'; // Assuming you have a BookDetail
         <Route path="/admin/usermanagement" element={<UserManagement />} /> {/* Admin User Management Route */}
         <Route path="/shop" element={<Shop />} /> {/* Shop Route */}
         <Route path="/bookdetails/:id" element={<BookDetails />} /> {/* Book Details Route */}
+        <Route path="/cart" element={<Cart />} /> {/* Cart Route */}
+        <Route path="/checkout" element={<Checkout />} /> {/* Checkout Route */}
+        <Route path="/addcard" element={<Addcard />} /> {/* Add Card Route */}
+        <Route path="/profile" element={<Profile />} /> {/* Profile Route */}
+        
         
       </Routes>
     </Router>

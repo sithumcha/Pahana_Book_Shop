@@ -54,6 +54,8 @@ import com.Pahana_edu.Backend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BookService {
 
@@ -89,4 +91,12 @@ public class BookService {
     public void deleteBook(String id) {
         bookRepository.deleteById(id);
     }
+
+//    // Get a book by its ID
+//    public Book getBookById(String id) {
+//        Optional<Book> optionalBook = bookRepository.findById(id); // Find the book by ID
+//        return optionalBook.orElse(null); // Return the book if found, else return null
+//    }
+
+
 }
