@@ -18,11 +18,10 @@ const BookDetails = () => {
     bookCategory
   } = location.state || {};
 
-  // State to store related books
   const [relatedBooks, setRelatedBooks] = useState([]);
   const [error, setError] = useState("");
 
-  // Fetch related books based on category
+  // Fetch related books
   useEffect(() => {
     const fetchRelatedBooks = async () => {
       try {
@@ -37,7 +36,6 @@ const BookDetails = () => {
         setError("An error occurred while fetching related books.");
       }
     };
-
     if (bookCategory) {
       fetchRelatedBooks();
     }
@@ -52,8 +50,32 @@ const BookDetails = () => {
 
   const imageSrc = getImageUrl();
 
+  // Add to Cart (persist in localStorage)
   const handleAddToCart = () => {
-    navigate('/cart', { state: location.state });
+    const newItem = {
+      bookTitle,
+      bookAuthor,
+      bookImage,
+      bookPrice,
+      bookDescription,
+      bookPages,
+      bookPublisher,
+      bookLanguage,
+      bookCategory,
+      quantity: 1
+    };
+
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingIndex = existingCart.findIndex(item => item.bookTitle === bookTitle);
+
+    if (existingIndex !== -1) {
+      existingCart[existingIndex].quantity += 1;
+    } else {
+      existingCart.push(newItem);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+    navigate('/cart');
   };
 
   const renderRating = (rating = 4) => {
@@ -91,12 +113,9 @@ const BookDetails = () => {
           className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
           <div className="flex flex-col lg:flex-row">
-            {/* Book Cover Section */}
+            {/* Book Cover */}
             <div className="lg:w-2/5 p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="relative"
-              >
+              <motion.div whileHover={{ scale: 1.02 }} className="relative">
                 <img
                   src={imageSrc}
                   alt={`Cover of ${bookTitle || 'the book'}`}
@@ -112,7 +131,7 @@ const BookDetails = () => {
               </motion.div>
             </div>
 
-            {/* Book Info Section */}
+            {/* Book Info */}
             <div className="lg:w-3/5 p-8 lg:p-12">
               <div className="mb-6">
                 <span className="inline-block bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full mb-4">
@@ -129,9 +148,7 @@ const BookDetails = () => {
                 </h2>
 
                 <div className="flex items-center mb-6">
-                  <div className="flex mr-4">
-                    {renderRating()}
-                  </div>
+                  <div className="flex mr-4">{renderRating()}</div>
                   <span className="text-gray-500">(24 reviews)</span>
                 </div>
               </div>
@@ -152,12 +169,12 @@ const BookDetails = () => {
                     className="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                   >
                     <FaShoppingCart className="mr-2" />
-                    Buy Now
+                    Add to Cart
                   </motion.button>
                 </div>
               </div>
 
-              {/* Book Details */}
+              {/* About Book */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">About This Book</h3>
                 <p className="text-gray-700 leading-relaxed mb-6">
@@ -183,78 +200,9 @@ const BookDetails = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Additional Actions */}
-              <div className="flex flex-wrap gap-3">
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Sample Chapter
-                </motion.button>
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Share
-                </motion.button>
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Compare
-                </motion.button>
-              </div>
             </div>
           </div>
         </motion.div>
-
-        {/* Related Books Section */}
-        {relatedBooks.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-16"
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">You May Also Like</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {relatedBooks.map((book) => (
-                <motion.div
-                  key={book.id}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer"
-                  onClick={() => navigate('/bookdetails', { 
-                    state: { 
-                      bookTitle: book.title,
-                      bookAuthor: book.author,
-                      bookPrice: book.price,
-                      bookDescription: book.description,
-                      bookImage: book.imageUrl,
-                      bookCategory: book.category,
-                      bookLanguage: book.language,
-                      bookPages: book.pages,
-                      bookPublisher: book.publisher,
-                    }
-                  })}
-                >
-                  <div className="h-48 bg-gray-100 flex items-center justify-center p-4">
-                    <img
-                      src={`http://localhost:8080/${book.imageUrl}`}
-                      alt={book.title}
-                      className="h-full w-auto object-contain"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-medium text-gray-900 line-clamp-1">{book.title}</h4>
-                    <p className="text-sm text-gray-500">{book.author}</p>
-                    <p className="text-indigo-600 font-medium mt-2">RS {book.price}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   );

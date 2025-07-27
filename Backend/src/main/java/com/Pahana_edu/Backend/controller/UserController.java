@@ -61,6 +61,17 @@ public class UserController {
         }
     }
 
+    // Get user by username
+    @GetMapping("/users/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        try {
+            User user = userService.findByUsername(username);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+
     // Update user details (with profile image upload)
     @PutMapping("/users/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username,

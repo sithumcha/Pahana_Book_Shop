@@ -22,51 +22,96 @@ const Profile = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Fetch user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/login'); // Redirect if no token
-          return;
-        }
+//   // Fetch user data on component mount
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+//         const username = localStorage.getItem('username');
 
-        // Request to fetch user data
-        const response = await axios.get('http://localhost:8080/api/auth/users', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+//         if (!token || !username) {
+//           navigate('/profile'); // Redirect if no token or username
+//           return;
+//         }
 
-        console.log('Fetched User Data:', response.data); // Debugging - log response
+//         const response = await axios.get(
+//           `http://localhost:8080/api/auth/users/${username}`,
+//           { headers: { Authorization: `Bearer ${token}` } }
+//         );
 
-        if (response.data) {
-          setUser(response.data);
-          setFormData({
-            username: response.data.username,
-            email: response.data.email,
-            contactNumber: response.data.contactNumber || '',
-            address: response.data.address || '',
-            gender: response.data.gender || 'Male',
-            birthdate: response.data.birthdate || '',
-            profileImage: null,
-            password: '',
-          });
-          if (response.data.profileImage) {
-            setImagePreview(`http://localhost:8080/${response.data.profileImage}`);
-          }
-        } else {
-          setError('No user data found');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Failed to load profile data');
+//         console.log('Fetched User Data:', response.data);
+
+//         if (response.data) {
+//           setUser(response.data);
+//           setFormData({
+//             username: response.data.username,
+//             email: response.data.email,
+//             contactNumber: response.data.contactNumber || '',
+//             address: response.data.address || '',
+//             gender: response.data.gender || 'Male',
+//             birthdate: response.data.birthdate || '',
+//             profileImage: null,
+//             password: '',
+//           });
+//           if (response.data.profileImagePath) {
+//             setImagePreview(`http://localhost:8080/${response.data.profileImagePath}`);
+//           }
+//         } else {
+//           setError('No user data found');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching user data:', error);
+//         setError('Failed to load profile data');
+//       }
+//     };
+
+//     fetchUserData();
+//   }, [navigate]);
+
+
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username'); // Save username during login
+
+      if (!token || !username) {
+        navigate('/profile ');
+        return;
       }
-    };
 
-    fetchUserData();
-  }, [navigate]);
+      const response = await axios.get(
+        `http://localhost:8080/api/auth/users/${username}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data) {
+        setUser(response.data);
+        setFormData({
+          username: response.data.username,
+          email: response.data.email,
+          contactNumber: response.data.contactNumber || '',
+          address: response.data.address || '',
+          gender: response.data.gender || 'Male',
+          birthdate: response.data.birthdate || '',
+          profileImage: null,
+          password: '',
+        });
+        if (response.data.profileImagePath) {
+          setImagePreview(`http://localhost:8080/${response.data.profileImagePath}`);
+        }
+      } else {
+        setError('No user data found');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setError('Failed to load profile data');
+    }
+  };
+
+  fetchUserData();
+}, [navigate]);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -82,7 +127,6 @@ const Profile = () => {
       profileImage: file,
     });
 
-    // Create image preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);
@@ -98,7 +142,6 @@ const Profile = () => {
       const token = localStorage.getItem('token');
       const formDataToSend = new FormData();
 
-      // Append all form data to FormData object
       formDataToSend.append('username', formData.username);
       formDataToSend.append('email', formData.email);
       formDataToSend.append('contactNumber', formData.contactNumber);
@@ -137,6 +180,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
     navigate('/login');
   };
 
@@ -151,7 +195,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        {/* Message and Error Display */}
         {message && (
           <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
             {message}
@@ -201,7 +244,6 @@ const Profile = () => {
             {isEditing ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* Left Column - Profile Image */}
                   <div className="md:w-1/3">
                     <div className="flex flex-col items-center">
                       <div className="relative mb-4">
@@ -226,7 +268,6 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  {/* Right Column - Form Fields */}
                   <div className="md:w-2/3 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="relative">
@@ -322,7 +363,6 @@ const Profile = () => {
               </form>
             ) : (
               <div className="flex flex-col md:flex-row gap-6">
-                {/* Left Column - Profile Image */}
                 <div className="md:w-1/3 flex flex-col items-center">
                   <div className="relative mb-4">
                     {imagePreview ? (
@@ -340,7 +380,6 @@ const Profile = () => {
                   <h2 className="text-xl font-bold text-center">{user.username}</h2>
                 </div>
 
-                {/* Right Column - Profile Details */}
                 <div className="md:w-2/3">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
