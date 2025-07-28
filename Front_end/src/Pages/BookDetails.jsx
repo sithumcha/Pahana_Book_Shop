@@ -78,6 +78,9 @@ const BookDetails = () => {
     navigate('/cart');
   };
 
+
+  
+
   const renderRating = (rating = 4) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -171,6 +174,7 @@ const BookDetails = () => {
                     <FaShoppingCart className="mr-2" />
                     Add to Cart
                   </motion.button>
+                  
                 </div>
               </div>
 

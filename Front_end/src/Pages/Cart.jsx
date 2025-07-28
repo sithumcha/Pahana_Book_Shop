@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 const Cart = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [cartItems, setCartItems] = useState([]);
   const [couponCode, setCouponCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -15,13 +16,11 @@ const Cart = () => {
 
   const validCoupons = ['BOOKLOVER10', 'READMORE10', 'SAVE10'];
 
-  // Load cart from localStorage
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
     setCartItems(savedCart);
   }, []);
 
-  // Add new book to cart (from BookDetails page)
   useEffect(() => {
     if (location.state) {
       addToCart(location.state);
@@ -121,9 +120,9 @@ const Cart = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <motion.button 
-            whileHover={{ x: -5 }} 
-            onClick={continueShopping} 
+          <motion.button
+            whileHover={{ x: -5 }}
+            onClick={continueShopping}
             className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors"
           >
             <FaArrowLeft className="mr-2" />
@@ -140,7 +139,7 @@ const Cart = () => {
         </div>
 
         {cartItems.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="bg-white rounded-xl shadow-lg p-12 text-center"
@@ -173,9 +172,9 @@ const Cart = () => {
                   >
                     <div className="p-6 flex flex-col sm:flex-row">
                       <div className="sm:w-1/4 mb-4 sm:mb-0">
-                        <img 
-                          src={imageSrc} 
-                          alt={item.bookTitle} 
+                        <img
+                          src={imageSrc}
+                          alt={item.bookTitle}
                           className="w-full h-48 object-contain rounded-lg shadow-sm"
                         />
                       </div>
@@ -185,17 +184,17 @@ const Cart = () => {
                             <h3 className="text-xl font-semibold text-gray-900">{item.bookTitle}</h3>
                             <p className="text-gray-600">by {item.bookAuthor}</p>
                           </div>
-                          <button 
+                          <button
                             onClick={() => removeItem(index)}
                             className="text-gray-400 hover:text-red-500 transition-colors"
                           >
                             <FaTrash />
                           </button>
                         </div>
-                        
+
                         <div className="mt-6 flex items-center justify-between">
                           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                            <button 
+                            <button
                               onClick={() => handleQuantityChange(index, -1)}
                               disabled={item.quantity <= 1}
                               className={`px-3 py-2 ${item.quantity <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
@@ -205,14 +204,14 @@ const Cart = () => {
                             <span className="px-4 py-2 border-l border-r border-gray-300 font-medium">
                               {item.quantity}
                             </span>
-                            <button 
+                            <button
                               onClick={() => handleQuantityChange(index, 1)}
                               className="px-3 py-2 text-gray-700 hover:bg-gray-100"
                             >
                               <FaPlus />
                             </button>
                           </div>
-                          
+
                           <div className="text-right">
                             <span className="text-lg font-bold text-indigo-600">
                               RS {formatCurrency(item.bookPrice * item.quantity)}
@@ -231,7 +230,7 @@ const Cart = () => {
               })}
 
               {/* Coupon Section */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="bg-white rounded-xl shadow-md p-6"
@@ -242,7 +241,7 @@ const Cart = () => {
                     Apply Coupon Code
                   </h3>
                   {!showCouponInput && !discountApplied && (
-                    <button 
+                    <button
                       onClick={() => setShowCouponInput(true)}
                       className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                     >
@@ -265,7 +264,7 @@ const Cart = () => {
                         {couponCode} applied (10% off)
                       </span>
                     </div>
-                    <button 
+                    <button
                       onClick={removeCoupon}
                       className="text-green-700 hover:text-green-900 text-sm"
                     >
@@ -306,7 +305,7 @@ const Cart = () => {
                 className="bg-white rounded-xl shadow-lg p-6 sticky top-6"
               >
                 <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
-                
+
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items)</span>
@@ -344,7 +343,7 @@ const Cart = () => {
 
                 <div className="mt-4 text-center text-sm text-gray-500">
                   <p>or</p>
-                  <button 
+                  <button
                     onClick={continueShopping}
                     className="text-indigo-600 hover:text-indigo-800 font-medium mt-1"
                   >

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify"; // Import Toastify
-import { useNavigate } from "react-router-dom"; // Import useNavigate for back navigation
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { FiUser, FiMail, FiKey, FiTrash2, FiEdit2, FiArrowLeft } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 
-const apiUrl = "http://localhost:8080/api/auth"; // Update with your API URL
+const apiUrl = "http://localhost:8080/api/auth";
 
 function UserDetails() {
   const [users, setUsers] = useState([]);
@@ -12,26 +13,29 @@ function UserDetails() {
     password: "",
     email: "",
   });
-  const [deleteUsername, setDeleteUsername] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Fetch users from the API
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${apiUrl}/users`);
+      if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);
       toast.error("Failed to fetch users.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Handle user update
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
@@ -44,136 +48,150 @@ function UserDetails() {
       });
       if (response.ok) {
         toast.success("User updated successfully!");
-        fetchUsers(); // Refresh the user list
+        fetchUsers();
+        setIsEditing(false);
+        setUpdateData({ username: "", password: "", email: "" });
       } else {
-        toast.error("Error updating user");
+        throw new Error("Error updating user");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error updating user");
+      toast.error(error.message);
     }
   };
 
-  // Handle user deletion
   const handleDeleteUser = async (username) => {
-    try {
-      const response = await fetch(`${apiUrl}/users/${username}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        toast.success("User deleted successfully!");
-        fetchUsers(); // Refresh the user list
-      } else {
-        toast.error("Error deleting user");
+    if (window.confirm(`Are you sure you want to delete user ${username}?`)) {
+      try {
+        const response = await fetch(`${apiUrl}/users/${username}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          toast.success("User deleted successfully!");
+          fetchUsers();
+        } else {
+          throw new Error("Error deleting user");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error(error.message);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error deleting user");
     }
   };
 
-  // Set user data to update
   const handleEditUser = (user) => {
     setUpdateData({
       username: user.username,
-      password: "", // You may want to handle password field carefully
+      password: "",
       email: user.email,
     });
+    setIsEditing(true);
   };
 
-  // Back Button to navigate to Admin Dashboard
   const goBackToAdminDashboard = () => {
-    navigate("/admin"); // Navigate to the Admin Dashboard
+    navigate("/admin");
   };
 
   return (
-    <div className="p-8 font-sans">
-      {/* Back Button */}
-      <button
-        onClick={goBackToAdminDashboard}
-        className="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-500 mb-6"
-      >
-        Back to Admin Dashboard
-      </button>
-
-      <h1 className="text-3xl font-semibold text-center mb-6">User Management</h1>
-
-      {/* Display Users */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Users</h2>
-        <ul className="list-none p-0">
-          {users.map((user) => (
-            <li
-              key={user.id}
-              className="p-4 mb-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center"
-            >
-              <div>
-                <span className="font-medium">Username:</span> {user.username},{" "}
-                <span className="font-medium">Email:</span> {user.email}
-              </div>
-              <div className="space-x-3">
-                <button
-                  className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-500"
-                  onClick={() => handleEditUser(user)}
-                >
-                  Update
-                </button>
-                <button
-                  className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-500"
-                  onClick={() => handleDeleteUser(user.username)}
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Update User Form */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Update User</h2>
-        <form onSubmit={handleUpdateUser}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={updateData.username}
-            onChange={(e) =>
-              setUpdateData({ ...updateData, username: e.target.value })
-            }
-            required
-            className="w-full p-3 mb-4 border rounded-md"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={updateData.password}
-            onChange={(e) =>
-              setUpdateData({ ...updateData, password: e.target.value })
-            }
-            className="w-full p-3 mb-4 border rounded-md"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={updateData.email}
-            onChange={(e) =>
-              setUpdateData({ ...updateData, email: e.target.value })
-            }
-            required
-            className="w-full p-3 mb-4 border rounded-md"
-          />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6 font-sans">
+      <div className="max-w-6xl mx-auto">
+        {/* Header with Back Button */}
+        <div className="flex items-center justify-between mb-8">
           <button
-            type="submit"
-            className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-500"
+            onClick={goBackToAdminDashboard}
+            className="flex items-center gap-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-500 transition-colors"
           >
-            Update
+            <FiArrowLeft /> Back to Dashboard
           </button>
-        </form>
+          <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
+          <div className="w-24"></div> {/* Spacer for alignment */}
+        </div>
+
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          </div>
+        ) : (
+          <>
+            {/* Users List */}
+            <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                  <FiUser className="text-indigo-600" />
+                  User Accounts ({users.length})
+                </h2>
+                
+                {users.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No users found</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {users.map((user) => (
+                          <tr key={user.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                                  <FiUser className="text-indigo-600" />
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{user.username}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <FiMail className="text-gray-400 mr-2" />
+                                <div className="text-sm text-gray-500">{user.email}</div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              <div className="flex gap-2">
+                               
+                                <button
+                                  onClick={() => handleDeleteUser(user.username)}
+                                  className="text-red-600 hover:text-red-900 flex items-center gap-1"
+                                >
+                                  <FiTrash2 /> Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+
+           
+          </>
+        )}
       </div>
 
-      {/* Toastify */}
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

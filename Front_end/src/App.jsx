@@ -18,6 +18,8 @@ import Cart from './Pages/Cart'; // Assuming you have a Cart component
 import Checkout from './Pages/Checkout';
 import Addcard from './Pages/Addcard'; // Assuming you have an Addcard component
 import  Profile from './Pages/Profile'; // Assuming you have a Profile component
+import AdminDashboard from './Admin/AdminDashBoard';
+import OrderListWithItems from './Admin/OrderListWithItems';
 
 
 
@@ -42,7 +44,9 @@ import  Profile from './Pages/Profile'; // Assuming you have a Profile component
         <Route path="/checkout" element={<Checkout />} /> {/* Checkout Route */}
         <Route path="/addcard" element={<Addcard />} /> {/* Add Card Route */}
         <Route path="/profile" element={<Profile />} /> {/* Profile Route */}
-        
+        <Route path="/admin/dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard Route */}
+        <Route path="/admin/orders" element={<OrderListWithItems />} /> {/* Admin Order List with Items Route */}
+       
         
       </Routes>
     </Router>

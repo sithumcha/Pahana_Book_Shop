@@ -1,7 +1,11 @@
+
+
+
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaCreditCard, FaPaypal, FaMoneyBillWave, FaArrowLeft, FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import jsPDF from 'jspdf';
 
 const Checkout = () => {
   const location = useLocation();
@@ -47,17 +51,177 @@ const Checkout = () => {
   // Calculate total
   const total = (cartTotal || subtotal) + shippingCost;
 
+  // Format as currency
+  const formatCurrency = (amount) => amount.toFixed(2);
+
   // Handle order submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, you would send this data to your backend
-    console.log('Order submitted:', { ...formData, cartItems, total });
-    setOrderPlaced(true);
+
+    // Prepare order data to match backend
+    const orderData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      zipCode: formData.zipCode,
+      country: formData.country,
+      paymentMethod: formData.paymentMethod,
+      discountAmount: discountApplied ? discountAmount : 0,
+      items: cartItems.map(item => ({
+        bookId: item.bookId || item.id,
+        bookTitle: item.bookTitle,
+        bookImage: item.bookImage,
+        bookPrice: item.bookPrice,
+        quantity: item.quantity,
+        lineTotal: item.bookPrice * item.quantity
+      }))
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Order placed:", result);
+
+         localStorage.removeItem('cart');
+
+
+        setOrderPlaced(true);
+
+
+      } else {
+        console.error("Failed to place order");
+        alert("Something went wrong while placing the order.");
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      alert("Network error. Please try again.");
+    }
   };
 
-  // Format as currency
-  const formatCurrency = (amount) => {
-    return amount.toFixed(2);
+  // Generate PDF Invoice with enhanced design
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    
+    // Colors
+    const primaryColor = '#4F46E5'; // Indigo-600
+    const secondaryColor = '#6B7280'; // Gray-500
+    const accentColor = '#10B981'; // Emerald-500
+    
+    // Add header with logo and title
+    doc.setFillColor(primaryColor);
+    doc.rect(0, 0, 210, 30, 'F');
+    doc.setFontSize(20);
+    doc.setTextColor(255, 255, 255);
+    doc.text('BookStore Invoice', 105, 20, { align: 'center' });
+    
+    // Add date and invoice number
+    doc.setFontSize(10);
+    doc.setTextColor(secondaryColor);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, 40);
+    doc.text(`Invoice #: ${Math.floor(100000 + Math.random() * 900000)}`, 15, 45);
+    
+    // Customer information
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, 'bold');
+    doc.text('BILL TO:', 15, 60);
+    doc.setFont(undefined, 'normal');
+    doc.text(`${formData.firstName} ${formData.lastName}`, 15, 67);
+    doc.text(formData.email, 15, 72);
+    doc.text(formData.address, 15, 77);
+    doc.text(`${formData.city}, ${formData.zipCode}, ${formData.country}`, 15, 82);
+    
+    // Add decorative line
+    doc.setDrawColor(primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(15, 90, 195, 90);
+    
+    // Items table header
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.setFillColor(primaryColor);
+    doc.rect(15, 95, 180, 10, 'F');
+    doc.text('Item', 20, 101);
+    doc.text('Price', 120, 101);
+    doc.text('Qty', 150, 101);
+    doc.text('Total', 170, 101);
+    
+    // Items list
+    let y = 110;
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(0, 0, 0);
+    
+    cartItems.forEach((item, index) => {
+      // Alternate row colors
+      if (index % 2 === 0) {
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, y - 5, 180, 10, 'F');
+      }
+      
+      doc.text(item.bookTitle, 20, y);
+      doc.text(`RS ${item.bookPrice.toFixed(2)}`, 120, y);
+      doc.text(item.quantity.toString(), 150, y);
+      doc.text(`RS ${(item.bookPrice * item.quantity).toFixed(2)}`, 170, y);
+      y += 10;
+    });
+    
+    // Summary section
+    y += 10;
+    doc.setDrawColor(secondaryColor);
+    doc.setLineWidth(0.2);
+    doc.line(120, y, 195, y);
+    y += 5;
+    
+    doc.setFontSize(12);
+    doc.text('Subtotal:', 120, y);
+    doc.text(`RS ${formatCurrency(subtotal)}`, 170, y);
+    y += 10;
+    
+    if (discountApplied) {
+      doc.setTextColor(accentColor);
+      doc.text('Discount:', 120, y);
+      doc.text(`- RS ${formatCurrency(discountAmount)}`, 170, y);
+      y += 10;
+      doc.setTextColor(0, 0, 0);
+    }
+    
+    doc.text('Shipping:', 120, y);
+    doc.text(shippingCost === 0 ? 'FREE' : `RS ${formatCurrency(shippingCost)}`, 170, y);
+    y += 10;
+    
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.text('Total:', 120, y);
+    doc.text(`RS ${formatCurrency(total)}`, 170, y);
+    
+    // Payment method
+    y += 15;
+    doc.setFontSize(10);
+    doc.setTextColor(secondaryColor);
+    doc.text(`Payment Method: ${formData.paymentMethod === 'creditCard' ? 'Credit Card' : 
+             formData.paymentMethod === 'paypal' ? 'PayPal' : 'Cash on Delivery'}`, 15, y);
+    
+    // Footer
+    y += 20;
+    doc.setFontSize(8);
+    doc.setTextColor(secondaryColor);
+    doc.text('Thank you for your purchase!', 105, y, { align: 'center' });
+    y += 5;
+    doc.text('BookStore Inc. • 123 Book Street • Reading, RD 12345', 105, y, { align: 'center' });
+    y += 5;
+    doc.text('support@bookstore.com • (123) 456-7890', 105, y, { align: 'center' });
+    
+    // Save the PDF
+    doc.save(`invoice_${new Date().toISOString().slice(0, 10)}.pdf`);
   };
 
   if (orderPlaced) {
@@ -66,21 +230,56 @@ const Checkout = () => {
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white p-12 rounded-2xl shadow-xl text-center max-w-md"
+          className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-lg w-full"
         >
-          <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-6" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Order Confirmed!</h1>
+          <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
           <p className="text-gray-600 mb-6">
-            Thank you for your purchase. Your order has been received and is being processed.
+            Thank you for your purchase. Here is your bill:
           </p>
-          <p className="text-gray-700 font-medium mb-8">
-            Order Total: <span className="text-indigo-600">RS {formatCurrency(total)}</span>
-          </p>
+
+          {/* Bill Section */}
+          <div className="text-left border border-gray-200 rounded-lg p-4 mb-6">
+            <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
+            {cartItems.map((item, index) => (
+              <div key={index} className="flex justify-between mb-1">
+                <span>{item.bookTitle} (x{item.quantity})</span>
+                <span>RS {formatCurrency(item.bookPrice * item.quantity)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between border-t pt-2 mt-2">
+              <span>Subtotal</span>
+              <span>RS {formatCurrency(subtotal)}</span>
+            </div>
+            {discountApplied && (
+              <div className="flex justify-between text-green-600">
+                <span>Discount</span>
+                <span>- RS {formatCurrency(discountAmount)}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span>{shippingCost === 0 ? 'Free' : `RS ${formatCurrency(shippingCost)}`}</span>
+            </div>
+            <div className="flex justify-between font-bold text-indigo-600 pt-2">
+              <span>Total</span>
+              <span>RS {formatCurrency(total)}</span>
+            </div>
+          </div>
+
+          {/* PDF Download Button */}
+          <button
+            onClick={generatePDF}
+            className="mb-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Download Invoice (PDF)
+          </button>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Continue Shopping
           </motion.button>
@@ -209,7 +408,6 @@ const Checkout = () => {
                       <option value="UK">United Kingdom</option>
                       <option value="CA">Canada</option>
                       <option value="IN">India</option>
-                      {/* Add more countries as needed */}
                     </select>
                   </div>
                 </div>
