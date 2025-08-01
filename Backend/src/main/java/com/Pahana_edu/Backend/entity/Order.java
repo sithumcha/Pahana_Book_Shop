@@ -17,6 +17,8 @@ public class Order {
     private String firstName;
     private String lastName;
     private String email;
+    private String contactNumber;
+
     private String address;
     private String city;
     private String zipCode;
@@ -46,6 +48,15 @@ public class Order {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }

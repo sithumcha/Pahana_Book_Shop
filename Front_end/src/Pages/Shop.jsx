@@ -16,38 +16,54 @@ const categories = [
 
 const BookShop = () => {
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
   const [showFilters, setShowFilters] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchBooks = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch("http://localhost:8080/api/books");
-        if (response.ok) {
-          const data = await response.json();
-          setBooks(data);
-        } else {
-          setError("Failed to fetch books. Please try again later.");
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
+        const data = await response.json();
+        setBooks(data);
+        setFilteredBooks(data); // Initialize filtered books with all books
+        setError("");
       } catch (error) {
-        setError("An error occurred while fetching the books.");
+        console.error("Error fetching books:", error);
+        setError("Failed to fetch books. Please try again later.");
+        setBooks([]);
+        setFilteredBooks([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchBooks();
   }, []);
 
-  const filterBooks = books.filter((book) => {
-    const matchesCategory = selectedCategory === "All" || book.category === selectedCategory;
-    const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         book.author.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPrice = book.price >= priceRange[0] && book.price <= priceRange[1];
-    return matchesCategory && matchesSearch && matchesPrice;
-  });
+  useEffect(() => {
+    // Filter books whenever search, category, or price changes
+    const filtered = books.filter((book) => {
+      const matchesCategory = selectedCategory === "All" || book.category === selectedCategory;
+      const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          book.author.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesPrice = book.price >= priceRange[0] && book.price <= priceRange[1];
+      return matchesCategory && matchesSearch && matchesPrice;
+    });
+    setFilteredBooks(filtered);
+  }, [books, selectedCategory, searchQuery, priceRange]);
 
   const handleBookNow = (book) => {
     navigate(`/bookdetails/${book.id}`, {
@@ -208,13 +224,20 @@ const BookShop = () => {
           </motion.div>
         )}
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          </div>
+        )}
+
         {/* Book Listings */}
-        {filterBooks.length > 0 ? (
+        {!isLoading && filteredBooks.length > 0 ? (
           <motion.div
             layout
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >
-            {filterBooks.map((book) => (
+            {filteredBooks.map((book) => (
               <motion.div
                 key={book.id}
                 layout
@@ -227,9 +250,12 @@ const BookShop = () => {
                 {/* Book Cover */}
                 <div className="relative h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                   <img
-                    src={`http://localhost:8080/${book.imageUrl}`}
+                    src={book.imageUrl.startsWith('http') ? book.imageUrl : `http://localhost:8080/${book.imageUrl}`}
                     alt={book.title}
                     className="h-48 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/200x300?text=Book+Cover";
+                    }}
                   />
                   <div className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md">
                     <FaShoppingCart className="text-indigo-600" />
@@ -269,17 +295,19 @@ const BookShop = () => {
             ))}
           </motion.div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
-            <div className="text-6xl mb-4">📚</div>
-            <h3 className="text-2xl font-medium text-gray-700 mb-2">No books found</h3>
-            <p className="text-gray-500">
-              {searchQuery ? "Try adjusting your search or filters" : "We're adding more books soon!"}
-            </p>
-          </motion.div>
+          !isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-16"
+            >
+              <div className="text-6xl mb-4">📚</div>
+              <h3 className="text-2xl font-medium text-gray-700 mb-2">No books found</h3>
+              <p className="text-gray-500">
+                {searchQuery ? "Try adjusting your search or filters" : "We're adding more books soon!"}
+              </p>
+            </motion.div>
+          )
         )}
       </div>
     </motion.div>

@@ -96,7 +96,7 @@ const AboutUs = () => {
         </div>
 
         {/* Testimonials */}
-        <div className="bg-indigo-100 rounded-xl p-8 mb-16">
+        {/* <div className="bg-indigo-100 rounded-xl p-8 mb-16">
           <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">What Readers Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, index) => (
@@ -107,7 +107,7 @@ const AboutUs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Call to Action */}
         <div className="text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12 px-4 rounded-xl shadow-lg">

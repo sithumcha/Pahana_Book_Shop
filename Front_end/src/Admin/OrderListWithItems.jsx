@@ -55,6 +55,54 @@ const OrderListWithItems = () => {
     );
   };
 
+  // const handleDelete = (orderId) => {
+  //   // Call delete API endpoint
+  //   fetch(`http://localhost:8080/api/checkout/${orderId}`, {
+  //     method: 'DELETE',
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         // Remove deleted order from the state
+  //         setOrders(orders.filter((order) => order._id !== orderId));
+  //       } else {
+  //         throw new Error("Failed to delete order");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setError(err.message);
+  //     });
+  // };
+
+
+  const handleDelete = (orderId) => {
+  // Show loading state (optional)
+  setLoading(true);
+
+  // Call delete API endpoint
+  fetch(`http://localhost:8080/api/checkout/${orderId}`, {
+    method: 'DELETE',
+  })
+    .then((res) => {
+      if (res.ok) {
+        // Remove deleted order from the state
+        setOrders(orders.filter((order) => order._id !== orderId));
+      } else if (res.status === 404) {
+        throw new Error("Order not found");
+      } else {
+        throw new Error("Failed to delete order");
+      }
+    })
+    .catch((err) => {
+      // Set error message
+      setError(err.message);
+    })
+    .finally(() => {
+      // Hide loading state after the API call
+      setLoading(false);
+    });
+};
+
+
   return (
     <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -122,6 +170,14 @@ const OrderListWithItems = () => {
                         <FiTruck className="mr-1 text-blue-600" />
                         {getStatusBadge(order.status || 'pending')}
                       </div>
+                    </div>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => handleDelete(order._id)}
+                        className="text-white bg-red-600 hover:bg-red-700 font-semibold py-2 px-4 rounded-lg transition-colors"
+                      >
+                        Delete Order
+                      </button>
                     </div>
                   </div>
 

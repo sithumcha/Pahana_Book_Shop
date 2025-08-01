@@ -3,6 +3,8 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import About from '../Components/About';
 import ContactUs from '../Components/Contactus';
+import NewArrivals from './NewArrivals';
+import Header from '../Components/Header';
  
 
 
@@ -18,10 +20,22 @@ export default function Home() {
           <p className="text-lg text-gray-600">This is the main content of the homepage.</p>
         </section>
 
+
+         <section className="bg-gray-100 py-10">
+          <Header />
+        </section>
+
+         {/* All Books  */}
+        <section className="bg-gray-100 py-10">
+          <NewArrivals />
+        </section>
+
+
         {/* About  */}
         <section className="bg-gray-100 py-10">
           <About />
         </section>
+
 
         {/* Contact  */}
         <section className="bg-gray-100 py-10">

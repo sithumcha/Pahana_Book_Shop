@@ -20,6 +20,8 @@ import Addcard from './Pages/Addcard'; // Assuming you have an Addcard component
 import  Profile from './Pages/Profile'; // Assuming you have a Profile component
 import AdminDashboard from './Admin/AdminDashBoard';
 import OrderListWithItems from './Admin/OrderListWithItems';
+import Header from './Components/Header';
+import NewArrivals from './Pages/NewArrivals';
 
 
 
@@ -46,6 +48,8 @@ import OrderListWithItems from './Admin/OrderListWithItems';
         <Route path="/profile" element={<Profile />} /> {/* Profile Route */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard Route */}
         <Route path="/admin/orders" element={<OrderListWithItems />} /> {/* Admin Order List with Items Route */}
+        <Route path="/" element={<Header />} /> {/* Header Component */}'
+        <Route path="/newarrivals" element={<NewArrivals />} /> {/* New Arrivals Route */}
        
         
       </Routes>

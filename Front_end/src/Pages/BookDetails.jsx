@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaStar, FaRegStar, FaShoppingCart, FaHeart, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import NewArrivals from './NewArrivals';
 
 const BookDetails = () => {
   const location = useLocation();
@@ -208,6 +209,13 @@ const BookDetails = () => {
           </div>
         </motion.div>
       </div>
+
+        <section className="bg-gray-100 py-10">
+          <NewArrivals />
+        </section>
+       
+
+
     </div>
   );
 };
