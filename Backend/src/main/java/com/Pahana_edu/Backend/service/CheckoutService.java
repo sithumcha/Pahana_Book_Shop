@@ -3,6 +3,7 @@ package com.Pahana_edu.Backend.service;
 import com.Pahana_edu.Backend.entity.Order;
 import com.Pahana_edu.Backend.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +16,8 @@ public class CheckoutService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+
 
     public Order placeOrder(Order orderRequest) {
         // Calculate subtotal
@@ -45,5 +48,8 @@ public class CheckoutService {
     }
 
 
-
 }
+
+
+
+
