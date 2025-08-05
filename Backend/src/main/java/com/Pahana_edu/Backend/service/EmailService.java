@@ -23,7 +23,7 @@ public class EmailService {
 
     public String sendEmail(String to, String subject, String body) throws IOException {
         System.out.println(to);
-        Email from = new Email("sithumchanukasandaruwan2002@gmail.com"); // Your sender email
+        // Your sender email
         Email toEmail = new Email(to); // Recipient's email
         Content content = new Content("text/plain", body); // Email body
         Mail mail = new Mail(from, subject, toEmail, content);
