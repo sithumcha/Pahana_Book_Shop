@@ -3,16 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaSearch, FaStar, FaRegStar, FaShoppingCart, FaFilter } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 
 const categories = [
   { name: "All", icon: "📚" },
   { name: "Fiction", icon: "📖" },
-  { name: "Non-Fiction", icon: "📕" },
-  { name: "Science", icon: "🔬" },
-  { name: "History", icon: "🏛️" },
-  { name: "Biography", icon: "👤" },
-  { name: "Fantasy", icon: "🐉" },
+  { name: "Children's Books", icon: "📕" },
+  { name: "Educational Books", icon: "🔬" },
+  { name: "Technology & Programming", icon: "🏛️" },
+  { name: "Health & Fitness", icon: "👤" },
+  // { name: "Fantasy", icon: "🐉" },
 ];
+
+
 
 const BookShop = () => {
   const [books, setBooks] = useState([]);
@@ -95,13 +99,21 @@ const BookShop = () => {
   };
 
   return (
+
+    
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8"
     >
-      <div className="max-w-7xl mx-auto">
+
+
+      <Navbar />
+      <div 
+     
+      
+      className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <motion.div
           initial={{ y: -50, opacity: 0 }}
@@ -310,6 +322,9 @@ const BookShop = () => {
           )
         )}
       </div>
+
+     
+      <Footer />
     </motion.div>
   );
 };

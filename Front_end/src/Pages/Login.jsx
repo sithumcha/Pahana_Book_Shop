@@ -45,7 +45,7 @@ const Login = () => {
 
         
         
-        navigate('/home', );
+        navigate('/', );
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid username or password');
@@ -128,11 +128,11 @@ const Login = () => {
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
-            <div className="flex justify-end mt-2">
+            {/* <div className="flex justify-end mt-2">
               <Link to="/forgot-password" className="text-xs text-purple-400 hover:underline">
                 Forgot password?
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Submit Button */}

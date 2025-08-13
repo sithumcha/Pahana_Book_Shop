@@ -22,6 +22,7 @@ import AdminDashboard from './Admin/AdminDashBoard';
 import OrderListWithItems from './Admin/OrderListWithItems';
 import Header from './Components/Header';
 import NewArrivals from './Pages/NewArrivals';
+import DownloadPDF from './Components/DownloadPDF';
 
 
 
@@ -31,7 +32,7 @@ import NewArrivals from './Pages/NewArrivals';
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/s" element={<S />} />
@@ -48,8 +49,11 @@ import NewArrivals from './Pages/NewArrivals';
         <Route path="/profile" element={<Profile />} /> {/* Profile Route */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard Route */}
         <Route path="/admin/orders" element={<OrderListWithItems />} /> {/* Admin Order List with Items Route */}
-        <Route path="/" element={<Header />} /> {/* Header Component */}'
+        <Route path="/header" element={<Header />} /> {/* Header Component */}'
         <Route path="/newarrivals" element={<NewArrivals />} /> {/* New Arrivals Route */}
+        <Route path="/downloadpdf" element={<DownloadPDF />} /> {/* Download PDF Route */}
+        
+        {/* Default route to Home */}
        
         
       </Routes>

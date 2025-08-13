@@ -115,6 +115,7 @@ const AboutUs = () => {
           <p className="text-xl mb-6">Visit us today or browse our online collection.</p>
           <button className="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
             Shop Now
+            
           </button>
         </div>
       </div>

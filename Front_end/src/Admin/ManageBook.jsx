@@ -590,11 +590,12 @@ function BookList() {
                       defaultValue={selectedBook.category}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
+                     
                       <option value="Fiction">Fiction</option>
-                      <option value="Non-Fiction">Non-Fiction</option>
-                      <option value="Science">Science</option>
-                      <option value="History">History</option>
-                      <option value="Biography">Biography</option>
+                      <option value="Children's Books">Children's Books</option>
+                      <option value="Educational Books">Educational Books</option>
+                      <option value="Technology & Programming">Technology & Programming</option>
+                      <option value="Health & Fitness">Health & Fitness</option>
                     </select>
                   </div>
                 </div>

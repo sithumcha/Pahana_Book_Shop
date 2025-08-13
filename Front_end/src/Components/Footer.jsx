@@ -162,7 +162,7 @@ const Footer = () => {
               <span className="text-2xl font-bold">Pahana Books</span>
             </div>
             <p className="text-gray-400">
-              Curating stories that inspire since 2010. Your literary sanctuary for rare finds and bestsellers.
+              Curating stories that inspire since 2024. Your literary sanctuary for rare finds and bestsellers.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-amber-500 transition">
@@ -214,11 +214,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <FaPhone className="text-amber-500" />
-                <p className="text-gray-400">(555) 123-4567</p>
+                <p className="text-gray-400">(+94) 771234567</p>
               </div>
               <div className="flex items-center space-x-3">
                 <FaEnvelope className="text-amber-500" />
-                <p className="text-gray-400">hello@pahanabooks.com</p>
+                <p className="text-gray-400">pahanabooks@gmail.com</p>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@ const Footer = () => {
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-xl font-bold mb-2">Join Our Literary Circle</h3>
-            <p className="text-gray-400 mb-4">Get 15% off your first order and weekly book recommendations.</p>
+            <p className="text-gray-400 mb-4">Enjoy 10% off ★★★★★ our handpicked recommendations - use code  at checkout.</p>
             {message && <div className="text-center mb-4 text-red-500">{message}</div>}
             <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
               <input

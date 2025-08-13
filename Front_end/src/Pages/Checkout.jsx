@@ -1,7 +1,10 @@
 
 
 
-// import React, { useState } from 'react';
+
+
+
+// import React, { useEffect, useState } from 'react';
 // import { useLocation, useNavigate } from 'react-router-dom';
 // import { FaCreditCard, FaPaypal, FaMoneyBillWave, FaArrowLeft, FaCheckCircle } from 'react-icons/fa';
 // import { motion } from 'framer-motion';
@@ -10,16 +13,32 @@
 // const Checkout = () => {
 //   const location = useLocation();
 //   const navigate = useNavigate();
-  
-//   // Extract cart data with discount information
-//   const { 
-//     cartItems = [], 
-//     discountApplied = false, 
-//     discountAmount = 0,
-//     total: cartTotal = 0 
-//   } = location.state || {};
 
-//   // Form states
+//   useEffect(() => {
+//     const token = localStorage.getItem('token');
+//     if (!token) {
+//       navigate('/login', { replace: true });
+//     }
+//   }, [navigate]);
+
+//   const [cartItems, setCartItems] = useState([]);
+//   const [discountApplied, setDiscountApplied] = useState(false);
+//   const [discountAmount, setDiscountAmount] = useState(0);
+//   const [cartTotal, setCartTotal] = useState(0);
+
+//   useEffect(() => {
+//     const state = location.state;
+//     if (state?.cartItems) {
+//       setCartItems(state.cartItems);
+//       setDiscountApplied(state.discountApplied || false);
+//       setDiscountAmount(state.discountAmount || 0);
+//       setCartTotal(state.total || 0);
+//     } else {
+//       const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+//       setCartItems(savedCart);
+//     }
+//   }, [location.state]);
+
 //   const [formData, setFormData] = useState({
 //     firstName: '',
 //     lastName: '',
@@ -36,57 +55,22 @@
 //   });
 
 //   const [orderPlaced, setOrderPlaced] = useState(false);
-// //     const [showLoginMessage, setShowLoginMessage] = useState(false);
 
-// //  useEffect(() => {
-// //   if (showLoginMessage) {
-// //     const timer = setTimeout(() => {
-// //       setShowLoginMessage(false);
-// //     }, 3000);
-// //     return () => clearTimeout(timer);
-// //   }
-// // }, [showLoginMessage]);
-
-
-//   // Handle form input changes
 //   const handleInputChange = (e) => {
 //     const { name, value } = e.target;
 //     setFormData(prev => ({ ...prev, [name]: value }));
 //   };
 
-//   // Calculate subtotal
 //   const subtotal = cartItems.reduce((sum, item) => sum + (item.bookPrice * item.quantity), 0);
-
-//   // Calculate shipping (free for orders over $50)
-//   const shippingCost = subtotal > 50 ? 0 : 5.99;
-
-//   // Calculate total
+//   const shippingCost = subtotal > 50 ? 0 : 0.00;
 //   const total = (cartTotal || subtotal) + shippingCost;
-
-//   // Format as currency
 //   const formatCurrency = (amount) => amount.toFixed(2);
 
-//   // Handle order submission
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
-//     //   const storedUser = JSON.parse(localStorage.getItem("user"));
-//     // if (!storedUser) {
-//     //   setShowLoginMessage(true);
-//     //   return;
-//     // }
-
-//     // Prepare order data to match backend
 //     const orderData = {
-//       firstName: formData.firstName,
-//       lastName: formData.lastName,
-//       email: formData.email,
-//       contactNumber: formData.contactNumber,
-//       address: formData.address,
-//       city: formData.city,
-//       zipCode: formData.zipCode,
-//       country: formData.country,
-//       paymentMethod: formData.paymentMethod,
+//       ...formData,
 //       discountAmount: discountApplied ? discountAmount : 0,
 //       items: cartItems.map(item => ({
 //         bookId: item.bookId || item.id,
@@ -108,15 +92,9 @@
 //       if (response.ok) {
 //         const result = await response.json();
 //         console.log("Order placed:", result);
-
-//          localStorage.removeItem('cart');
-
-
+//         localStorage.removeItem('cart');
 //         setOrderPlaced(true);
-
-
 //       } else {
-//         console.error("Failed to place order");
 //         alert("Something went wrong while placing the order.");
 //       }
 //     } catch (error) {
@@ -124,30 +102,24 @@
 //       alert("Network error. Please try again.");
 //     }
 //   };
-  
-//   // Generate PDF Invoice with enhanced design
+
 //   const generatePDF = () => {
 //     const doc = new jsPDF();
-    
-//     // Colors
-//     const primaryColor = '#4F46E5'; // Indigo-600
-//     const secondaryColor = '#6B7280'; // Gray-500
-//     const accentColor = '#10B981'; // Emerald-500
-    
-//     // Add header with logo and title
+//     const primaryColor = '#4F46E5';
+//     const secondaryColor = '#6B7280';
+//     const accentColor = '#10B981';
+
 //     doc.setFillColor(primaryColor);
 //     doc.rect(0, 0, 210, 30, 'F');
 //     doc.setFontSize(20);
 //     doc.setTextColor(255, 255, 255);
 //     doc.text('BookStore Invoice', 105, 20, { align: 'center' });
-    
-//     // Add date and invoice number
+
 //     doc.setFontSize(10);
 //     doc.setTextColor(secondaryColor);
 //     doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, 40);
 //     doc.text(`Invoice #: ${Math.floor(100000 + Math.random() * 900000)}`, 15, 45);
-    
-//     // Customer information
+
 //     doc.setFontSize(12);
 //     doc.setTextColor(0, 0, 0);
 //     doc.setFont(undefined, 'bold');
@@ -158,13 +130,11 @@
 //     doc.text(`Contact: ${formData.contactNumber}`, 15, 87);
 //     doc.text(formData.address, 15, 77);
 //     doc.text(`${formData.city}, ${formData.zipCode}, ${formData.country}`, 15, 82);
-    
-//     // Add decorative line
+
 //     doc.setDrawColor(primaryColor);
 //     doc.setLineWidth(0.5);
 //     doc.line(15, 90, 195, 90);
-    
-//     // Items table header
+
 //     doc.setFontSize(12);
 //     doc.setFont(undefined, 'bold');
 //     doc.setTextColor(255, 255, 255);
@@ -174,38 +144,34 @@
 //     doc.text('Price', 120, 101);
 //     doc.text('Qty', 150, 101);
 //     doc.text('Total', 170, 101);
-    
-//     // Items list
+
 //     let y = 110;
 //     doc.setFont(undefined, 'normal');
 //     doc.setTextColor(0, 0, 0);
-    
+
 //     cartItems.forEach((item, index) => {
-//       // Alternate row colors
 //       if (index % 2 === 0) {
 //         doc.setFillColor(245, 245, 245);
 //         doc.rect(15, y - 5, 180, 10, 'F');
 //       }
-      
 //       doc.text(item.bookTitle, 20, y);
 //       doc.text(`RS ${item.bookPrice.toFixed(2)}`, 120, y);
 //       doc.text(item.quantity.toString(), 150, y);
 //       doc.text(`RS ${(item.bookPrice * item.quantity).toFixed(2)}`, 170, y);
 //       y += 10;
 //     });
-    
-//     // Summary section
+
 //     y += 10;
 //     doc.setDrawColor(secondaryColor);
 //     doc.setLineWidth(0.2);
 //     doc.line(120, y, 195, y);
 //     y += 5;
-    
+
 //     doc.setFontSize(12);
 //     doc.text('Subtotal:', 120, y);
 //     doc.text(`RS ${formatCurrency(subtotal)}`, 170, y);
 //     y += 10;
-    
+
 //     if (discountApplied) {
 //       doc.setTextColor(accentColor);
 //       doc.text('Discount:', 120, y);
@@ -213,24 +179,22 @@
 //       y += 10;
 //       doc.setTextColor(0, 0, 0);
 //     }
-    
+
 //     doc.text('Shipping:', 120, y);
 //     doc.text(shippingCost === 0 ? 'FREE' : `RS ${formatCurrency(shippingCost)}`, 170, y);
 //     y += 10;
-    
+
 //     doc.setFont(undefined, 'bold');
 //     doc.setFontSize(14);
 //     doc.text('Total:', 120, y);
 //     doc.text(`RS ${formatCurrency(total)}`, 170, y);
-    
-//     // Payment method
+
 //     y += 15;
 //     doc.setFontSize(10);
 //     doc.setTextColor(secondaryColor);
-//     doc.text(`Payment Method: ${formData.paymentMethod === 'creditCard' ? 'Credit Card' : 
-//              formData.paymentMethod === 'paypal' ? 'PayPal' : 'Cash on Delivery'}`, 15, y);
-    
-//     // Footer
+//     doc.text(`Payment Method: ${formData.paymentMethod === 'creditCard' ? 'Credit Card' :
+//       formData.paymentMethod === 'paypal' ? 'PayPal' : 'Cash on Delivery'}`, 15, y);
+
 //     y += 20;
 //     doc.setFontSize(8);
 //     doc.setTextColor(secondaryColor);
@@ -239,8 +203,7 @@
 //     doc.text('BookStore Inc. • 123 Book Street • Reading, RD 12345', 105, y, { align: 'center' });
 //     y += 5;
 //     doc.text('support@bookstore.com • (123) 456-7890', 105, y, { align: 'center' });
-    
-//     // Save the PDF
+
 //     doc.save(`invoice_${new Date().toISOString().slice(0, 10)}.pdf`);
 //   };
 
@@ -254,11 +217,8 @@
 //         >
 //           <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-4" />
 //           <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
-//           <p className="text-gray-600 mb-6">
-//             Thank you for your purchase. Here is your bill:
-//           </p>
+//           <p className="text-gray-600 mb-6">Thank you for your purchase. Here is your bill:</p>
 
-//           {/* Bill Section */}
 //           <div className="text-left border border-gray-200 rounded-lg p-4 mb-6">
 //             <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
 //             {cartItems.map((item, index) => (
@@ -287,7 +247,6 @@
 //             </div>
 //           </div>
 
-//           {/* PDF Download Button */}
 //           <button
 //             onClick={generatePDF}
 //             className="mb-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
@@ -298,7 +257,7 @@
 //           <motion.button
 //             whileHover={{ scale: 1.05 }}
 //             whileTap={{ scale: 0.95 }}
-//             onClick={() => navigate('/')}
+//             onClick={() => navigate('/home')}
 //             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
 //           >
 //             Continue Shopping
@@ -307,6 +266,11 @@
 //       </div>
 //     );
 //   }
+
+ 
+
+
+
 
 //   return (
 //     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -634,8 +598,19 @@
 //     </div>
 //   );
 // };
+ 
+
+
+  
+//     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+//       {/* Add your Checkout form here */}
+//       {/* Form and Order Summary already handled in your original code */}
+//     </div>
+
 
 // export default Checkout;
+
+
 
 
 
@@ -731,6 +706,65 @@ const Checkout = () => {
         console.log("Order placed:", result);
         localStorage.removeItem('cart');
         setOrderPlaced(true);
+
+        // Send confirmation email
+        // const emailResponse = await fetch("http://localhost:8080/api/v1/sendemail", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     to: formData.email,
+        //     subject: 'Order Confirmation',
+        //     body: `Thank you for your order! Here are the details:\n\n` +
+        //           `Order Summary: ${cartItems.map(item => `${item.bookTitle} x ${item.quantity} = ${item.bookPrice * item.quantity}`).join('\n')}` + 
+        //           `\n\nTotal: RS ${formatCurrency(total)}`
+        //   })
+        // });
+
+
+        // Send confirmation email
+const emailResponse = await fetch("http://localhost:8080/api/v1/sendemail", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    to: formData.email,
+    subject: '📚 Your Order Confirmation',
+    body: `
+╔══════════════════════════════════════╗
+║          ORDER CONFIRMATION          ║
+╚══════════════════════════════════════╝
+
+Thank you for your order! We're preparing your books for shipment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 ORDER SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${cartItems.map(item => `
+📖 ${item.bookTitle}
+   Quantity: ${item.quantity}
+   Price:    RS ${(item.bookPrice * item.quantity).toFixed(2)}
+${item !== cartItems[cartItems.length-1] ? '├───────────────────────────────────' : '└───────────────────────────────────'}
+`).join('')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💳 TOTAL: RS ${total.toFixed(2)}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+We'll notify you when your order ships. 
+Expect delivery in 3-5 business days.
+
+For any questions, contact us at:
+📧 support@bookstore.com
+☎️ +91 1234567890
+
+Thank you for shopping with us!
+`
+  })
+});
+
+        if (!emailResponse.ok) {
+          alert('Error sending confirmation email.');
+        }
       } else {
         alert("Something went wrong while placing the order.");
       }
@@ -894,7 +928,7 @@ const Checkout = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Continue Shopping
@@ -903,11 +937,6 @@ const Checkout = () => {
       </div>
     );
   }
-
- 
-
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -971,19 +1000,16 @@ const Checkout = () => {
                 </div>
 
                 <div className="md:col-span-2">
-  <label className="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
-  <input
-    type="text"
-    name="contactNumber"
-    value={formData.contactNumber}
-    onChange={handleInputChange}
-    required
-    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-  />
-</div>
-
-
-
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+                  <input
+                    type="text"
+                    name="contactNumber"
+                    value={formData.contactNumber}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
               </div>
             </motion.div>
 
@@ -1169,8 +1195,7 @@ const Checkout = () => {
               className="bg-white p-6 rounded-xl shadow-sm sticky top-6"
             >
               <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
-              
-              {/* Cart Items */}
+               {/* Cart Items */}
               <div className="space-y-4 mb-6">
                 {cartItems.map((item, index) => (
                   <div key={index} className="flex justify-between items-start">
@@ -1235,17 +1260,5 @@ const Checkout = () => {
     </div>
   );
 };
- 
-
-
-  
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Add your Checkout form here */}
-      {/* Form and Order Summary already handled in your original code */}
-    </div>
-
 
 export default Checkout;
-
-
-

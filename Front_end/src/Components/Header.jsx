@@ -48,7 +48,7 @@ const Header = () => {
           transition={{ delay: 0.5, duration: 1 }}
           className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl inline-block max-w-3xl font-bold pt-20 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200'
         >
-          Book Your Ride,<br />Anytime, Anywhere
+          Explore Your Favorite Books,<br />Anytime, Anywhere
         </motion.h2>
         
         <motion.p 
@@ -57,7 +57,7 @@ const Header = () => {
           transition={{ delay: 0.8, duration: 1 }}
           className='text-xl md:text-2xl mt-6 text-blue-100 max-w-2xl mx-auto'
         >
-          Premium transportation services at your fingertips. Fast, reliable, and luxurious.
+          Discover a world of literature at your fingertips. Fast, reliable, and seamless.
         </motion.p>
         
         <motion.div 
@@ -69,15 +69,15 @@ const Header = () => {
           <motion.a 
             whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.2)" }}
             whileTap={{ scale: 0.95 }}
-            href="#Services" 
+            href="./downloadpdf" 
             className='border-2 border-white px-8 py-4 rounded-full text-lg font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-300'
           >
-            Our Services
+            Our Guide Line
           </motion.a>
           <motion.a 
             whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(59, 130, 246, 0.7)" }}
             whileTap={{ scale: 0.95 }}
-            href="#Contact" 
+            href="./contactus" 
             className='bg-blue-600 px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-700 transition-all duration-300 relative overflow-hidden'
           >
             <span className="relative z-10">Contact Us</span>
