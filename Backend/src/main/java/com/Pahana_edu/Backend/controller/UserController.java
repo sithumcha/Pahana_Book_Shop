@@ -1,7 +1,9 @@
 package com.Pahana_edu.Backend.controller;
 
+import com.Pahana_edu.Backend.entity.Order;
 import com.Pahana_edu.Backend.entity.User;
 import com.Pahana_edu.Backend.entity.LoginRequest;
+import com.Pahana_edu.Backend.service.CheckoutService;
 import com.Pahana_edu.Backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -61,11 +63,23 @@ public class UserController {
         }
     }
 
+
     // Get user by username
     @GetMapping("/users/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         try {
             User user = userService.findByUsername(username);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+
+    //  Get user by ID
+    @GetMapping("/users/id/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        try {
+            User user = userService.findById(id);
             return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(null);

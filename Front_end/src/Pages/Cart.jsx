@@ -108,7 +108,7 @@ const Cart = () => {
   };
 
   const continueShopping = () => {
-    navigate('/books');
+    navigate('/shop');
   };
 
   const formatCurrency = (amount) => {

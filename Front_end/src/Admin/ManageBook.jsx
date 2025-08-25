@@ -393,7 +393,7 @@ function BookList() {
   };
 
   const goBackToAdminDashboard = () => {
-    navigate('/admin');
+    navigate('/admin/dashboard');
   };
 
   const filteredBooks = books.filter(book => 

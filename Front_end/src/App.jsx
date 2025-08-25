@@ -23,7 +23,8 @@ import OrderListWithItems from './Admin/OrderListWithItems';
 import Header from './Components/Header';
 import NewArrivals from './Pages/NewArrivals';
 import DownloadPDF from './Components/DownloadPDF';
-
+import PendingOrdersView from './Pages/PendingOrdersView';
+import Whitelist from './Pages/whitelist';
 
 
  function App() {
@@ -52,6 +53,14 @@ import DownloadPDF from './Components/DownloadPDF';
         <Route path="/header" element={<Header />} /> {/* Header Component */}'
         <Route path="/newarrivals" element={<NewArrivals />} /> {/* New Arrivals Route */}
         <Route path="/downloadpdf" element={<DownloadPDF />} /> {/* Download PDF Route */}
+        <Route path="/pendingorders" element={<PendingOrdersView />} /> {/* Pending Orders View Route */}
+        <Route path="/whitelist" element={<Whitelist />} /> {/* Whitelist Route */}
+        
+        {/* Add more routes as needed */}
+        
+        {/* Default route to Home */}
+        
+        {/* Add more routes as needed */}
         
         {/* Default route to Home */}
        

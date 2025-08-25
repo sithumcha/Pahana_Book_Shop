@@ -92,11 +92,7 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-//    // Get a book by its ID
-//    public Book getBookById(String id) {
-//        Optional<Book> optionalBook = bookRepository.findById(id); // Find the book by ID
-//        return optionalBook.orElse(null); // Return the book if found, else return null
-//    }
+
 
 
 }

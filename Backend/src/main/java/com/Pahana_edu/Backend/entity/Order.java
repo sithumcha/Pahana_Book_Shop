@@ -14,6 +14,7 @@ public class Order {
     private String id;
 
     // Customer Info
+    private String userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -57,7 +58,6 @@ public class Order {
         this.contactNumber = contactNumber;
     }
 
-
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -93,4 +93,7 @@ public class Order {
 
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }

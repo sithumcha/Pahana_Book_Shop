@@ -65,35 +65,12 @@ public class EmailService {
     @Autowired
     private SendGrid sendGrid;  // SendGrid API client
 
-//    public String sendEmail(String to, String subject, String body) throws IOException {
-//        // Sender email address
-//        Email from = new Email("sithumchanukasandaruwn2002@gmail.com");  // Replace with your sender email
-//        // Recipient's email address
-//        Email toEmail = new Email(to);
-//        // Email body content
-//        Content content = new Content("text/plain", body);
-//        // Construct the email
-//        Mail mail = new Mail(from, subject, toEmail, content);
-//
-//        // Prepare the request to send the email
-//        Request request = new Request();
-//        try {
-//            request.setMethod(Method.POST);
-//            request.setEndpoint("mail/send");
-//            request.setBody(mail.build());
-//
-//            // Send the email using SendGrid API
-//            Response response = sendGrid.api(request);
-//            return "Email sent successfully";  // Return success message
-//        } catch (IOException ex) {
-//            throw new IOException("Error sending email: " + ex.getMessage(), ex);  // Handle errors
-//        }
-//    }
+
 
 
     public String sendEmail(String to, String subject, String body) throws IOException {
         // Sender email
-        Email from = new Email("");  // Replace with your sender email
+        Email from = new Email("your@gmail.com");  // Replace with your sender email
         // Recipient email
         Email toEmail = new Email(to);
         // Email content

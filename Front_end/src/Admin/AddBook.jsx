@@ -46,7 +46,7 @@ const AddBook = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4e3fd4] via-[#4e43cc] to-[#2828c7] p-4">
       <div className="w-full max-w-md backdrop-blur-lg bg-white/5 rounded-2xl shadow-2xl overflow-hidden p-8 text-white">
         <h2 className="text-2xl font-bold text-center mb-6">Add New Book</h2>
         
@@ -138,7 +138,7 @@ const AddBook = () => {
             </div>
           </div>
 
-          {/* Category */}
+          {/* Category
           <div className="relative">
             <label className="block text-xs text-gray-400 mb-1">Category</label>
             <div className="relative">
@@ -158,7 +158,31 @@ const AddBook = () => {
                 <option value="Health & Fitness">Health & Fitness</option>
               </select>
             </div>
-          </div>
+          </div> */}
+
+
+          {/* Category */}
+<div className="relative">
+  <label className="block text-xs text-gray-400 mb-1">Category</label>
+  <div className="relative">
+    <FiFileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+    <select
+      name="category"
+      value={formData.category}
+      onChange={handleChange}
+      required
+      className="w-full pl-10 pr-4 py-3 bg-blue-10 to to-black text-black border border-blue-700 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+    >
+      <option value="">Select Category</option>
+      <option value="Fiction">Fiction</option>
+      <option value="Children's Books">Children's Books</option>
+      <option value="Educational Books">Educational Books</option>
+      <option value="Technology & Programming">Technology & Programming</option>
+      <option value="Health & Fitness">Health & Fitness</option>
+    </select>
+  </div>
+</div>
+
 
           {/* Description */}
           <div className="relative">
@@ -188,7 +212,7 @@ const AddBook = () => {
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/20 transition-all"
+              className="w-full bg-gradient-to-r from-purple-700 to-blue-500 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/20 transition-all"
             >
               Add Book
             </button>

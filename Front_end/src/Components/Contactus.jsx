@@ -244,6 +244,7 @@ import { toast } from 'react-toastify';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock, FaPaperPlane, FaBook } from 'react-icons/fa';
 import { FiCheckCircle } from 'react-icons/fi';
 import emailjs from '@emailjs/browser';
+import Navbar from './Navbar';
 
 const ContactUs = () => {
   const formRef = useRef();
@@ -280,10 +281,21 @@ const ContactUs = () => {
   };
 
   return (
+
+
+   
     <div className="bg-gray-50">
+
+      
+
+      
       {/* Hero Section */}
       <div className="relative bg-indigo-900 text-white py-20 px-4 sm:px-6 lg:px-8">
+
+        
         <div className="absolute inset-0 bg-black/50">
+
+        
           <img
             src="https://images.unsplash.com/photo-1535905557558-afc4877a26fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1771&q=80"
             alt="Bookshop interior"
@@ -460,7 +472,12 @@ const ContactUs = () => {
           ></iframe>
         </div>
       </div>
+
+       
     </div>
+  
+
+   
   );
 };
 
