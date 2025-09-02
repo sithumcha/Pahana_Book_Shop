@@ -6,7 +6,6 @@ import RegisterPage from './Pages/Register';
 import Home from './Pages/Home'; 
 import AboutUs from './Components/About';
 import ContactUs from './Components/Contactus';
-import S from './Pages/S';
 import AdminRegister from './Admin/AdminRegister';
 import AdminLogin from './Admin/AdminLogin'; // Assuming you have an AdminLogin component
 import AddBook from './Admin/AddBook'; 
@@ -25,6 +24,7 @@ import NewArrivals from './Pages/NewArrivals';
 import DownloadPDF from './Components/DownloadPDF';
 import PendingOrdersView from './Pages/PendingOrdersView';
 import Whitelist from './Pages/whitelist';
+import AdminManage from './Admin/Adminmanage';
 
 
  function App() {
@@ -36,7 +36,6 @@ import Whitelist from './Pages/whitelist';
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactus" element={<ContactUs />} />
-        <Route path="/s" element={<S />} />
         <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/admin/login" element={<AdminLogin />} /> {/* Admin Login Route */}
         <Route path="/admin/addbook" element={<AddBook />} /> {/* Admin Add Book Route */}
@@ -55,7 +54,7 @@ import Whitelist from './Pages/whitelist';
         <Route path="/downloadpdf" element={<DownloadPDF />} /> {/* Download PDF Route */}
         <Route path="/pendingorders" element={<PendingOrdersView />} /> {/* Pending Orders View Route */}
         <Route path="/whitelist" element={<Whitelist />} /> {/* Whitelist Route */}
-        
+        <Route path="/admin/manage" element={<AdminManage />} /> {/* Admin Manage Route */}
         {/* Add more routes as needed */}
         
         {/* Default route to Home */}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiShoppingBag, FiUser, FiPhone, FiMail, FiMapPin, FiDollarSign, FiClock, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminOrderView = () => {
   const [orders, setOrders] = useState([]);
@@ -19,6 +21,7 @@ const AdminOrderView = () => {
       setOrders(response.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
+      toast.error("Failed to fetch orders");
     } finally {
       setIsLoading(false);
     }
@@ -28,8 +31,10 @@ const AdminOrderView = () => {
     try {
       await axios.put(`http://localhost:8080/api/checkout/${id}`, { status: "CONFIRMED" });
       fetchOrders();
+      toast.success("Order confirmed successfully!");
     } catch (error) {
       console.error("Error confirming order:", error);
+      toast.error("Failed to confirm order");
     }
   };
 
@@ -37,8 +42,10 @@ const AdminOrderView = () => {
     try {
       await axios.put(`http://localhost:8080/api/checkout/${id}`, { status: "SHIPPED" });
       fetchOrders();
+      toast.success("Order marked as shipped!");
     } catch (error) {
       console.error("Error shipping order:", error);
+      toast.error("Failed to update order status");
     }
   };
 
@@ -49,8 +56,12 @@ const AdminOrderView = () => {
     try {
       await axios.delete(`http://localhost:8080/api/checkout/${id}`);
       fetchOrders();
+      toast.success("Order deleted successfully!", {
+        icon: "🗑️"
+      });
     } catch (error) {
       console.error("Error deleting order:", error);
+      toast.error("Failed to delete order");
     }
   };
 
@@ -161,11 +172,8 @@ const AdminOrderView = () => {
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            {/* <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                              <FiShoppingBag className="h-5 w-5 text-indigo-600" />
-                            </div> */}
                             <div>
-                              {/* <div className="text-sm font-medium text-gray-900">Order #{order.id}</div> */}
+                              <div className="text-sm font-medium text-gray-900">Order #{order.id}</div>
                               <div className="flex items-center text-sm text-gray-500 mt-1">
                                 <FiClock className="mr-1" />
                                 {formatDate(order.createdAt)}
@@ -223,7 +231,6 @@ const AdminOrderView = () => {
                                 Ship
                               </button>
                             )}
-                            {/* Delete button is now always visible */}
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDelete(order.id); }}
                               className="px-3 py-1 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition-all duration-200 text-sm"
@@ -351,6 +358,20 @@ const AdminOrderView = () => {
           )}
         </div>
       )}
+      
+      {/* Toast Container */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };

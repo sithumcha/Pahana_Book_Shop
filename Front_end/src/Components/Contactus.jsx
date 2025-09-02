@@ -284,7 +284,7 @@ const ContactUs = () => {
 
 
    
-    <div className="bg-gray-50">
+    <div className="bg-gradient-to-b from-blue-50 to-indigo-50 min-h-screen">
 
       
 

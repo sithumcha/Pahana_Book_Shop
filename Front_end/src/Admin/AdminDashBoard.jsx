@@ -30,7 +30,7 @@ const AdminDashboard = () => {
           fetch("http://localhost:8080/api/auth/users"),
           fetch("http://localhost:8080/api/books"),
           fetch("http://localhost:8080/api/checkout"),
-          fetch("http://localhost:8080/api/admins")
+          fetch("http://localhost:8080/admin/all")
         ]);
         
         const users = await usersRes.json();
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
             </li>
             <li>
               <button 
-                onClick={() => navigate("/admin/admins")}
+                onClick={() => navigate("/admin/manage")}
                 className={`w-full flex items-center gap-3 p-3 rounded-lg ${activeView === "admins" ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 <FiShield /> Admin Management
@@ -229,7 +229,7 @@ const AdminDashboard = () => {
                   <span>View Orders</span>
                 </button>
                 <button 
-                  onClick={() => navigate("/admin/admins")}
+                  onClick={() => navigate("/admin/manage")}
                   className="p-4 border border-gray-200 rounded-lg hover:bg-purple-50 hover:border-purple-200 transition-colors flex items-center gap-3"
                 >
                   <FiShield className="text-purple-600" />

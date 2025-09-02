@@ -63,23 +63,11 @@ public class CheckoutService {
     }
 
 
-
-
-
-
-
-
-
     // Get confirmed orders by user ID
     public List<Order> getConfirmedOrdersByUserId(String userId) {
         return orderRepository.findAll().stream()
                 .filter(order -> order.getUserId().equals(userId) && order.getStatus().equals("CONFIRMED"))
                 .collect(Collectors.toList());
     }
-
-
-
-
-
 
 }

@@ -1,5 +1,4 @@
 
-
 package com.Pahana_edu.Backend.controller;
 
 import com.Pahana_edu.Backend.entity.Book;
@@ -27,7 +26,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    // POST: Add a new book
+    // Add book
     @PostMapping("/add")
     public ResponseEntity<Book> addBook(@RequestParam("title") String title,
                                         @RequestParam("author") String author,
@@ -47,7 +46,7 @@ public class BookController {
         }
     }
 
-    // GET: Get all books
+    //Get all books
     @GetMapping
     public ResponseEntity<Iterable<Book>> getAllBooks() {
         try {

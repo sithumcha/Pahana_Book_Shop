@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class CheckoutController {
     @Autowired
     private CheckoutService checkoutService;
 
-    // Create an order
+
     @PostMapping
     public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
         try {
@@ -30,7 +29,7 @@ public class CheckoutController {
         }
     }
 
-    // Get all orders
+
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         return new ResponseEntity<>(checkoutService.getAllOrders(), HttpStatus.OK);
@@ -69,12 +68,6 @@ public class CheckoutController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
-
 
     // Delete an order by ID
     @DeleteMapping("/{id}")
