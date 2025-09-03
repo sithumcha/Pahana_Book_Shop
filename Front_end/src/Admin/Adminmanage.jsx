@@ -124,7 +124,7 @@ function AdminManage() {
   };
 
   const goBackToDashboard = () => {
-    navigate("/admin");
+    navigate("/admin/dashboard");
   };
 
   const filteredAdmins = admins.filter(admin =>

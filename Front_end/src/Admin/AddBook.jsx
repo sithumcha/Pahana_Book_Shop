@@ -396,7 +396,7 @@ const AddBook = () => {
         </form>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          <a href="/books" className="text-indigo-600 hover:text-indigo-800 hover:underline font-medium transition-colors">
+          <a href="/admin/managebook" className="text-indigo-600 hover:text-indigo-800 hover:underline font-medium transition-colors">
             ← Back to All Books
           </a>
         </div>

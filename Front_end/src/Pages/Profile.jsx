@@ -257,8 +257,9 @@ const Profile = () => {
     // Clear items from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    localStorage.removeItem('cart'); // Clear the cart from localStorage
-    setCart([]); // Clear the cart state
+    localStorage.removeItem('cart'); 
+    setCart([]); 
+   
 
     navigate('/login'); // Redirect to login page
   };

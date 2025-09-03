@@ -36,7 +36,7 @@ import AdminManage from './Admin/Adminmanage';
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactus" element={<ContactUs />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route path="/admin" element={<AdminRegister />} />
         <Route path="/admin/login" element={<AdminLogin />} /> {/* Admin Login Route */}
         <Route path="/admin/addbook" element={<AddBook />} /> {/* Admin Add Book Route */}
         <Route path="/admin/managebook" element={<ManageBook />} /> {/* Admin Manage Book Route */}

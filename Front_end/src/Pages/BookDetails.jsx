@@ -94,6 +94,41 @@ const BookDetails = () => {
     showNotification('Book added to cart!');
   };
 
+  // Handle Buy Now - Add to cart and navigate to cart page
+  const handleBuyNow = () => {
+    const newItem = {
+      bookTitle,
+      bookAuthor,
+      bookImage,
+      bookPrice,
+      bookDescription,
+      bookPages,
+      bookPublisher,
+      bookLanguage,
+      bookCategory,
+      quantity: 1
+    };
+
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingIndex = existingCart.findIndex(item => item.bookTitle === bookTitle);
+
+    if (existingIndex !== -1) {
+      existingCart[existingIndex].quantity += 1;
+    } else {
+      existingCart.push(newItem);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+    
+    // Navigate to cart page with the current item highlighted
+    navigate('/cart', { 
+      state: { 
+        highlightedItem: bookTitle,
+        message: 'Your item has been added to the cart!'
+      } 
+    });
+  };
+
   // Add to Whitelist (persist in localStorage)
   const handleAddToWhitelist = () => {
     const newItem = {
@@ -306,8 +341,8 @@ const BookDetails = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => navigate('/cart')}
-                      className="px-6 py-3 bg-white border border-indigo-300 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                      onClick={handleBuyNow}
+                      className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg"
                     >
                       Buy Now
                     </motion.button>

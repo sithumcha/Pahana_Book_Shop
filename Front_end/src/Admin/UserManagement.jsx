@@ -89,7 +89,7 @@ function UserDetails() {
   };
 
   const goBackToAdminDashboard = () => {
-    navigate("/admin");
+    navigate("/admin/dashboard");
   };
 
   return (
